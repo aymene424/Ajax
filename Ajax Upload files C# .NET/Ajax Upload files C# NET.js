@@ -6,6 +6,22 @@ for (var i = 0; i < number_images; i++) {
     if (i == number_images - 1) {
 
         $.ajax({
+            xhr: function () {
+                var xhr = new window.XMLHttpRequest();
+                //Upload progress
+                xhr.upload.addEventListener("progress", function (evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        //Do something with upload progress
+
+                        $('#progress').css({ width: (percentComplete * 100) + '%' });
+                        $('#progress-nbr').text(percentComplete * 100 + '%');
+
+                    }
+                }, false);
+
+                return xhr;
+            },
             type: 'post',
             url: 'Uploader.ashx', // Le Post doit être vers une page ( Gestionnaire Générique .ashx ) pour les UPLOAD
             data: formData, // Le Type de data à envoyé c'est Data l'image

@@ -6,6 +6,22 @@ for (var i = 0; i < $('#Multiple-photos-input')[0].files.length; i++) {
     if (i == $('#Multiple-photos-input')[0].files.length - 1) {
 
         $.ajax({
+            xhr: function () {
+                var xhr = new window.XMLHttpRequest();
+                //Upload progress
+                xhr.upload.addEventListener("progress", function (evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        //Do something with upload progress
+
+                        $('#progress').css({ width: (percentComplete * 100) + '%' });
+                        $('#progress-nbr').text(percentComplete * 100 + '%');
+
+                    }
+                }, false);
+
+                return xhr;
+            },
             url: 'db_upload.php',
             method: "POST",
             data: formData,
